@@ -1,0 +1,102 @@
+// Email
+function validateEmail(email) {
+  const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return pattern.test(email);
+}
+// Phone
+function validatePhoneNumber(phoneNumber) {
+  const pattern = /^\d{10}$/;
+  return pattern.test(phoneNumber);
+}
+// URL
+function validateURL(url) {
+  const pattern = /^(https?:\/\/)?([^\s$.?#].[^\s]*)$/i;
+  return pattern.test(url);
+}
+// DATE
+function validateDate(date) {
+  const pattern = /^\d{4}-\d{2}-\d{2}$/;
+  return pattern.test(date) && !isNaN(Date.parse(date));
+}
+// Validate Password (at least 8 characters, 1 uppercase, 1 lowercase, 1 number)
+function validatePassword(password) {
+  const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+  return pattern.test(password);
+}
+// Postal Code
+function validatePostalCode(postalCode) {
+  const pattern = /^\d{5}(-\d{4})?$/;
+  return pattern.test(postalCode);
+}
+// Validate Name (at least two words)
+function validateName(name) {
+  return name.trim().split(" ").length >= 2;
+}
+// Validate Age (number between 0 and 120)
+
+function validateAge(age) {
+  const pattern = /^\d+$/;
+  return pattern.test(age) && age >= 0 && age <= 120;
+}
+// Validate Username (alphanumeric, 3-20 characters)
+function validateUsername(username) {
+  const pattern = /^[a-zA-Z0-9]{3,20}$/;
+  return pattern.test(username);
+}
+//
+
+function handleSubmit(formData) {
+  const errors = {};
+
+  if (!validateEmail(formData.email)) {
+    errors.email = "Invalid email address.";
+  }
+  if (!validatePhoneNumber(formData.phoneNumber)) {
+    errors.phoneNumber = "Invalid phone number.";
+  }
+  if (!validateURL(formData.website)) {
+    errors.website = "Invalid URL.";
+  }
+  if (!validateDate(formData.birthDate)) {
+    errors.birthDate = "Invalid date format. Use YYYY-MM-DD.";
+  }
+  if (!validatePassword(formData.password)) {
+    errors.password =
+      "Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one number.";
+  }
+  if (!validatePostalCode(formData.postalCode)) {
+    errors.postalCode = "Invalid postal code.";
+  }
+  if (!validateName(formData.name)) {
+    errors.name = "Name must contain at least two words.";
+  }
+  if (!validateAge(formData.age)) {
+    errors.age = "Invalid age.";
+  }
+  if (!validateUsername(formData.username)) {
+    errors.username = "Invalid username. Must be 3-20 alphanumeric characters.";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    console.error("Validation errors:", errors);
+    return false;
+  }
+
+  console.log("Form is valid!");
+  return true;
+}
+//
+const formData = {
+  email: "example@example.com",
+  phoneNumber: "1234567890",
+  website: "https://example.com",
+  birthDate: "1990-01-01",
+  password: "Password123",
+  postalCode: "12345",
+  name: "John Doe",
+  age: 30,
+  gender: true,
+  username: "john_doe",
+};
+
+handleSubmit(formData);

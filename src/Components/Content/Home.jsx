@@ -134,7 +134,7 @@ export default function Home() {
                     {data ? (data.gender ? "Male" : "Female") : "Unknown"}
                   </Typography>
                   <Typography variant="h8" color="white">
-                    <b className="underline">date of birth: </b>
+                    <b className="underline">Date of birth: </b>
                     {data ? data.dateofbirth : "undifined"}
                   </Typography>
                 </Typography>

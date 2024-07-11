@@ -8,7 +8,6 @@ import CardCover from "@mui/joy/CardCover";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
 import { AspectRatio, CardActions, CardOverflow, Sheet } from "@mui/joy";
-import { info } from "autoprefixer";
 import { apiUrl, title } from "./Home";
 
 function Detail() {
@@ -34,6 +33,18 @@ function Detail() {
         });
     }
   }, [ID]);
+
+  const fields = [
+    { label: "Date of Birth", value: infor?.dateofbirth },
+    // {
+    //   label: "Created At",
+    //   value: moment(infor?.createdAt).format("YYYY-MM-DD"),
+    // },
+    { label: "Feedback", value: infor?.feedback },
+    { label: "Class", value: infor?.class },
+    { label: "Gender", value: infor?.gender ? "Male" : "Female" },
+    // Add more fields as needed
+  ];
 
   if (loading) {
     return (
@@ -87,7 +98,7 @@ function Detail() {
                 }}
               >
                 <Typography level="h2" fontSize="lg" textColor="#000">
-                  Card
+                  Information Card
                 </Typography>
                 <CardCover
                   sx={{
@@ -96,7 +107,7 @@ function Detail() {
                     border: "1px solid",
                     borderColor: "#777",
                     backdropFilter: "blur(1px)",
-                    backgroundImage: `url(${infor ? infor.image : ""})`,
+                    backgroundImage: `url(${infor?.image || ""})`,
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "Cover",
@@ -114,8 +125,7 @@ function Detail() {
                   }}
                 >
                   <Typography level="h2" fontSize="lg" textColor="#fff" m={2}>
-                    {infor ? infor.name : "Undifined"} -{" "}
-                    {infor ? infor.id : "Undifined"}
+                    {infor?.name || "Undefined"} - {infor?.id || "Undefined"}
                   </Typography>
                 </CardContent>
               </Card>
@@ -148,7 +158,7 @@ function Detail() {
                     boxShadow: "sm",
                     bgcolor: "background.surface",
                     position: "relative",
-                    backgroundImage: `url(${infor.image})`,
+                    backgroundImage: `url(${infor?.image})`,
                     backgroundPosition: "center",
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "Cover",
@@ -173,7 +183,12 @@ function Detail() {
             </Card>
           </Box>
           {/* Infor Card */}
-          <Stack className="absolute w-full h-full left-[30em] top-[18em]">
+          <Stack
+            className="absolute w-full h-full left-[30em] top-[13em]"
+            sx={{
+              overflow: "auto", // Ensure the container is scrollable
+            }}
+          >
             <Box
               sx={{
                 width: "100%",
@@ -221,7 +236,6 @@ function Detail() {
                     minWidth:
                       "clamp(0px, (calc(var(--stack-point) - 2 * var(--Card-padding) - 2 * var(--variant-borderWidth, 0px)) + 1px - 100%) * 999, 100%)",
                   },
-                  // make the card resizable for demo
                   overflow: "auto",
                   resize: "horizontal",
                 }}
@@ -232,57 +246,33 @@ function Detail() {
                   maxHeight={182}
                   sx={{ minWidth: 182 }}
                 >
-                  <img src={infor.image} />
+                  <img src={infor?.image} alt="User" />
                 </AspectRatio>
                 <CardContent>
                   <Typography fontSize="xl" fontWeight="lg">
-                    {infor.name}
+                    {infor?.name}
                   </Typography>
-                  <Typography
-                    level="body-sm"
-                    fontWeight="lg"
-                    textColor="text.tertiary"
-                  >
-                    {infor.class}
-                  </Typography>
-                  <Sheet
-                    sx={{
-                      bgcolor: "background.level1",
-                      borderRadius: "sm",
-                      p: 1.5,
-                      my: 1.5,
-                      display: "flex",
-                      gap: 2,
-                      "& > div": { flex: 1 },
-                    }}
-                  >
-                    <div>
-                      <Typography level="body-xs" fontWeight="lg">
-                        Date of birth
-                      </Typography>
-                      <Typography fontWeight="lg">
-                        {infor ? infor.dateofbirth : "None"}
-                      </Typography>
-                    </div>
-                    <div>
-                      <Typography level="body-xs" fontWeight="lg">
-                        CreateAt
-                      </Typography>
-                      <Typography fontWeight="lg">
-                        {moment(infor ? info.createdAt : "").format(
-                          "YYYY-MM-DD"
-                        )}
-                      </Typography>
-                    </div>
-                    <div>
-                      <Typography level="body-xs" fontWeight="lg">
-                        Feedback
-                      </Typography>
-                      <Typography fontWeight="lg">
-                        {infor ? infor.feedback : ""}
-                      </Typography>
-                    </div>
-                  </Sheet>
+                  {fields.map((field, index) => (
+                    <Sheet
+                      key={index}
+                      sx={{
+                        bgcolor: "background.level1",
+                        borderRadius: "sm",
+                        p: 1.5,
+                        my: 1.5,
+                        display: "flex",
+                        gap: 2,
+                        "& > div": { flex: 1 },
+                      }}
+                    >
+                      <div>
+                        <Typography level="body-xs" fontWeight="lg">
+                          {field.label}
+                        </Typography>
+                        <Typography fontWeight="lg">{field.value}</Typography>
+                      </div>
+                    </Sheet>
+                  ))}
                   <Box
                     sx={{
                       display: "flex",
