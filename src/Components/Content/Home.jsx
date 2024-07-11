@@ -13,8 +13,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { AssignmentInd, CheckCircle } from "@mui/icons-material";
+
 export const apiUrl = "https://66900b04c0a7969efd9abe4b.mockapi.io";
 export const title = "student";
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -27,7 +29,6 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function Home() {
-  const [expanded, setExpanded] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -36,13 +37,20 @@ export default function Home() {
       .then((res) => res.json())
       .then((res) => {
         setData(res);
-        setLoading(false); // Set loading to false once data is fetched
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        setLoading(true); // Set loading to false in case of an error
+        setLoading(true);
       });
   }, []);
+
+  const fields = [
+    { label: "Name", value: "name" },
+    { label: "Feedback", value: "feedback" },
+    { label: "Gender", value: (data) => (data.gender ? "Male" : "Female") },
+    { label: "Date of Birth", value: "dateofbirth" },
+  ];
 
   return (
     <Grid container spacing={4} className="mt-10">
@@ -100,8 +108,8 @@ export default function Home() {
                   </IconButton>
                 }
                 className="text-center font-bold"
-                title={`ID: ${data ? data.id : "Undefined"}`}
-                subheader={`Class:${data ? data.class : "Undefined"}`}
+                title={`ID: ${data.id}`}
+                subheader={`Class: ${data.class}`}
               />
               {/* Background */}
               <CardMedia
@@ -121,22 +129,14 @@ export default function Home() {
               {/* Information */}
               <CardContent className="absolute bottom-14 bg-black bg-opacity-25 w-full max-h-[10em] transition-all visible z-[-1] duration-1000 translate-y-[100%] group-hover:z-[1] group-hover:translate-y-[-1%]">
                 <Typography className="text-left flex flex-col flex-1">
-                  <Typography variant="h8" color="white">
-                    <b className="underline">NAME</b>:{" "}
-                    {data ? data.name : "Noname"}
-                  </Typography>
-                  <Typography variant="h8" color="white">
-                    <b className="underline">Feedback</b>:{" "}
-                    {data ? data.feedback : "undifined"}
-                  </Typography>
-                  <Typography variant="h8" color="white">
-                    <b className="underline">Gender: </b>
-                    {data ? (data.gender ? "Male" : "Female") : "Unknown"}
-                  </Typography>
-                  <Typography variant="h8" color="white">
-                    <b className="underline">Date of birth: </b>
-                    {data ? data.dateofbirth : "undifined"}
-                  </Typography>
+                  {fields.map((field, index) => (
+                    <Typography variant="h8" color="white" key={index}>
+                      <b className="underline">{field.label}:</b>{" "}
+                      {typeof field.value === "function"
+                        ? field.value(data)
+                        : data[field.value] || "Undefined"}
+                    </Typography>
+                  ))}
                 </Typography>
               </CardContent>
               {/* Action */}
@@ -152,7 +152,7 @@ export default function Home() {
                   <CheckCircle />
                 </IconButton>
 
-                <Link to={`/Detail/${data?.id}`}>
+                <Link to={`/Detail/${data.id}`}>
                   <Button variant="contained" className="ml-10">
                     Details
                   </Button>
