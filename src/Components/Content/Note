@@ -100,3 +100,30 @@ const formData = {
 };
 
 handleSubmit(formData);
+// Switch
+const handleChange = (e) => {
+  const { name, value, checked } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: name === "gender" ? checked : value,
+  }));
+};
+<FormControl required fullWidth>
+  <FormControlLabel
+    control={
+      <Switch
+        checked={!!formData.gender}
+        onChange={handleChange}
+        name="gender"
+        color="primary"
+      />
+    }
+    label="Gender"
+    labelPlacement="start"
+  />
+  {errors.gender && (
+    <Typography color="error" variant="body2">
+      {errors.gender}
+    </Typography>
+  )}
+</FormControl>;
