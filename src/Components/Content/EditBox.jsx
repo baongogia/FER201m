@@ -7,9 +7,10 @@ import {
   IconButton,
   Stack,
   TextField,
+  Select,
+  MenuItem,
   FormControl,
-  FormControlLabel,
-  Switch,
+  InputLabel,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -19,11 +20,8 @@ function EditBox({ title, open, setOpen, onSubmit, formData, setFormData }) {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    const { name, value, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "gender" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const validate = () => {
@@ -128,19 +126,19 @@ function EditBox({ title, open, setOpen, onSubmit, formData, setFormData }) {
               onChange={handleChange}
               label="Feedback"
             />
-            <FormControl required fullWidth>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={!!formData.gender}
-                    onChange={handleChange}
-                    name="gender"
-                    color="primary"
-                  />
-                }
+            <FormControl required variant="outlined" fullWidth>
+              <InputLabel id="gender-label">Gender</InputLabel>
+              <Select
+                labelId="gender-label"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
                 label="Gender"
-                labelPlacement="start"
-              />
+                error={!!errors.gender}
+              >
+                <MenuItem value={true}>Male - True</MenuItem>
+                <MenuItem value={false}>Female - False</MenuItem>
+              </Select>
               {errors.gender && (
                 <Typography color="error" variant="body2">
                   {errors.gender}
